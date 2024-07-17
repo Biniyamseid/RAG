@@ -4,6 +4,7 @@
 
 ![RAG Application](image.png)
 
+
 The Chat-with-pdf-LLM-application is designed to enhance your productivity by allowing seamless interaction with PDF documents through a conversational interface. This application leverages the latest advancements in language learning models to revolutionize how you engage with digital documents.
 
 ## Features
