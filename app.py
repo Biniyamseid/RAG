@@ -58,7 +58,26 @@ def get_conversation_chain(vectorstore):
 
 
 
+def handle_userinput(user_question):
+    if st.session_state.conversation is None:
+        # If conversation is not initialized, initialize it here
+        vectorstore = st.session_state.vectorstore
+        if vectorstore is not None:
+            st.session_state.conversation = get_conversation_chain(vectorstore)
+        else:
+            st.write("Error: Vector store not initialized.")
+            return
 
+    response = st.session_state.conversation({'question': user_question})
+    st.session_state.chat_history = response['chat_history']
+
+    for i, message in enumerate(st.session_state.chat_history):
+        if i % 2 == 0:
+            st.write(user_template.replace(
+                "{{MSG}}", message.content), unsafe_allow_html=True)
+        else:
+            st.write(bot_template.replace(
+                "{{MSG}}", message.content), unsafe_allow_html=True)
 
 
 
