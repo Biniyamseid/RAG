@@ -1,22 +1,22 @@
-# Chat-with-pdf-LLM-application
-to install the Chat-with-pdf-LLM-application, please follow these steps:
+# RAG - Chat-with-pdf-LLM-application
 
-Clone the repository to your local machine.
+![GitHub stars](https://img.shields.io/github/stars/yourusername/Chat-with-pdf-LLM-application?style=social) ![GitHub forks](https://img.shields.io/github/forks/yourusername/Chat-with-pdf-LLM-application?style=social) ![GitHub issues](https://img.shields.io/github/issues/yourusername/Chat-with-pdf-LLM-application) ![Python version](https://img.shields.io/badge/python-3.8+-blue.svg)
 
-1. Install the required dependencies by running the following command:
+![RAG Application](image.png)
 
- ```
-   pip install -r requirements.txt
-   ```
+The Chat-with-pdf-LLM-application is designed to enhance your productivity by allowing seamless interaction with PDF documents through a conversational interface. This application leverages the latest advancements in language learning models to revolutionize how you engage with digital documents.
 
-2 . Run the main.py file using the Streamlit CLI. Execute the following command:
+## Features
 
-```
-   streamlit run app.py
-   ```
-   or
+- Interactive Chat Interface
+- Advanced Search within PDFs
+- Summarization of documents
 
-```
-   python3 -m streamlit run app.py
-   ```
-# RAG
+## Installation
+
+To install the Chat-with-pdf-LLM-application, please follow these steps:
+
+1. **Clone the repository** to your local machine.
+
+   ```bash
+   git clone https://github.com/Biniyamseid/RAG.git
