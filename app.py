@@ -4,14 +4,16 @@ from dotenv import load_dotenv
 from PyPDF2 import PdfReader
 import langchain
 from langchain.text_splitter import CharacterTextSplitter
-from langchain.embeddings import OpenAIEmbeddings, HuggingFaceInstructEmbeddings
+from langchain.embeddings import OpenAIEmbeddings, HuggingFaceInstructEmbeddings,HuggingFaceEmbeddings
 from langchain.vectorstores import FAISS
 from langchain.chat_models import ChatOpenAI
 from langchain.memory import ConversationBufferMemory
+
 from langchain.chains import ConversationalRetrievalChain
 
 from htmlTemplates import css, bot_template, user_template
-
+from langchain_community.embeddings import HuggingFaceInstructEmbeddings, HuggingFaceEmbeddings
+from langchain_community.vectorstores import FAISS
 
 from langchain.llms import HuggingFaceHub
 
@@ -37,17 +39,13 @@ def get_text_chunks(text):
     return chunks
 
 
-# def get_vectorstore(text_chunks):
-    
-#     embeddings = HuggingFaceInstructEmbeddings(model_name="hkunlp/instructor-xl")
-#     vectorstore = FAISS.from_texts(texts=text_chunks, embedding=embeddings)
-#     return vectorstore
-
 
 
 def get_vectorstore(text_chunks):
     embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
-    # embeddings = HuggingFaceInstructEmbeddings(model_name="hkunlp/instructor-xl")
+    if not embeddings:
+        print("Embeddings list is empty. Cannot proceed with FAISS.from_texts.")
+        return None
     try:
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         vectorstore = FAISS.from_texts(texts=text_chunks, embedding=embeddings).to(device)
