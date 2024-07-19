@@ -46,7 +46,8 @@ def get_text_chunks(text):
 
 
 def get_vectorstore(text_chunks):
-    embeddings = HuggingFaceInstructEmbeddings(model_name="hkunlp/instructor-xl")
+    embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+    # embeddings = HuggingFaceInstructEmbeddings(model_name="hkunlp/instructor-xl")
     try:
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         vectorstore = FAISS.from_texts(texts=text_chunks, embedding=embeddings).to(device)
