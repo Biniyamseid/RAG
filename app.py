@@ -1,4 +1,5 @@
 import streamlit as st
+import torch
 from dotenv import load_dotenv
 from PyPDF2 import PdfReader
 import langchain
@@ -16,7 +17,7 @@ from langchain.llms import HuggingFaceHub
 
 
 
-def get_pdf_text(pdf_docs):
+def get_text(pdf_docs):
     text = ""
     for pdf in pdf_docs:
         pdf_reader = PdfReader(pdf)
@@ -36,16 +37,32 @@ def get_text_chunks(text):
     return chunks
 
 
-def get_vectorstore(text_chunks):
+# def get_vectorstore(text_chunks):
     
+#     embeddings = HuggingFaceInstructEmbeddings(model_name="hkunlp/instructor-xl")
+#     vectorstore = FAISS.from_texts(texts=text_chunks, embedding=embeddings)
+#     return vectorstore
+
+
+
+def get_vectorstore(text_chunks):
     embeddings = HuggingFaceInstructEmbeddings(model_name="hkunlp/instructor-xl")
-    vectorstore = FAISS.from_texts(texts=text_chunks, embedding=embeddings)
+    try:
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        vectorstore = FAISS.from_texts(texts=text_chunks, embedding=embeddings).to(device)
+    except RuntimeError as e:
+        if "CUDA out of memory" in str(e):
+            print("CUDA out of memory. Moving computation to CPU.")
+            device = torch.device("cpu")
+            vectorstore = FAISS.from_texts(texts=text_chunks, embedding=embeddings).to(device)
+        else:
+            raise e
     return vectorstore
 
 
 def get_conversation_chain(vectorstore):
    
-    llm = HuggingFaceHub(repo_id="google/flan-t5-xxl", model_kwargs={"temperature":0.5, "max_length":512})
+    llm = HuggingFaceHub(repo_id="google/flan-t5-xxl", model_kwargs={"temperature":0.5, "max_length":50})
 
     memory = ConversationBufferMemory(
         memory_key='chat_history', return_messages=True)
@@ -106,7 +123,7 @@ def main():
         if st.button("Process"):
             with st.spinner("Processing"):
                 # get pdf text
-                raw_text = get_pdf_text(pdf_docs)
+                raw_text = get_text(pdf_docs)
 
                 # get the text chunks
                 text_chunks = get_text_chunks(raw_text)
