@@ -17,7 +17,13 @@ The Chat-with-pdf-LLM-application is designed to enhance your productivity by al
 
 To install the Chat-with-pdf-LLM-application, please follow these steps:
 
+
+sudo apt-get update
+pip install tf-keras
+sudo apt-get install swig
+
 1. **Clone the repository** to your local machine.
+
 
    ```bash
    git clone https://github.com/Biniyamseid/RAG.git
